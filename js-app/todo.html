@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <style> 
+            input[type=button] {
+                background-color: lightgreen;
+                padding: 10px;
+                cursor: pointer;
+                border-radius: 50%
+            }
+            input[type=text]{
+                padding: 10px;
+            }
+            body{
+                font-size: 25px;
+                padding: 10px;
+            }
+            
+        </style>
+    </head>
+    <body>
+        TASK: <input type="text" id="taskname">
+        <input type="button" value="Add" onclick="add()">
+        <br>
+        <ul id="tasks">
+            
+        </ul> 
+        <script type="text/javascript">
+            function add() {
+                var x = document.getElementById("taskname").value;
+                var node = document.createElement("li");
+                var textvalue = document.createTextNode(x);
+                node.appendChild(textvalue);
+                document.getElementById("tasks").appendChild(node);
+                
+            }
+        </script>
+    </body>
+</html>
