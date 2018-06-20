@@ -1,37 +1,160 @@
 <html>
     <head>
         <style> 
-            input[type=button] {
+            .round {
                 background-color: lightgreen;
                 padding: 10px;
                 cursor: pointer;
                 border-radius: 50%
             }
+
             input[type=text]{
                 padding: 10px;
             }
+            
             body{
                 font-size: 25px;
                 padding: 10px;
             }
+
+            .left {
+                left: 0;
+            }
+
+            .right {
+                right: 0;
+                border: solid;
+                
+            }
             
+            .split {
+                height: 100%;
+                width: 50%;
+                position: fixed;
+                top: 0;
+                padding: 15px;
+            }
         </style>
     </head>
     <body>
-        TASK: <input type="text" id="taskname">
-        <input type="button" value="Add" onclick="add()">
-        <br>
-        <ul id="tasks">
-            
-        </ul> 
+        <div class="split left">
+            TASK: <input type="text" id="taskname">
+            <input type="button" id="add" value="Add" class="round" onclick="add()">
+            <br>
+            <ul id="tasks">
+            </ul> 
+        </div>
+        <div class="split right" style="height:20%;">
+            <b>DASHBOARD</b><hr>
+            Tasks: <b id="taskcount"></b><br>
+            Last update: <b id="time"></b>
+        </div>
         <script type="text/javascript">
+            var maincount=0;
+            var maintask=[];
+            var icount=0;
+            if(localStorage["com.swabhav.tasks"]!=null){
+            start();
+            }
+            function start(){                      
+            var task_value=localStorage["com.swabhav.tasks"];            
+            task_value=JSON.parse(task_value);
+            l=task_value.length;
+            icount=l;                        
+            scount= localStorage.getItem("count");    
+            if(l!=0 || l!=null)
+            {
+                var i;
+                for(i=0;i<l;i++)
+                {
+                    var x = task_value[i].name;
+                    var node = document.createElement("li");
+                    node.id=i+1;                    
+                    var textvalue = document.createTextNode(x+" ");
+                    var btn= document.createElement("input");
+                    btn.type="button";
+                    btn.onclick=del;
+                    btn.value="x";
+                    node.appendChild(textvalue);
+                    node.appendChild(btn);
+                    document.getElementById("tasks").appendChild(node);                            
+                }
+            }
+            document.getElementById("time").innerHTML = task_value[l-1].time;
+            document.getElementById("taskcount").innerHTML=l;
+            }    
+            var scount=0;
+            // var c=0;
+            var add1=0;
+            var sdate= localStorage.getItem("date");
+            scount= localStorage.getItem("count");
+            add1=scount;                      
+            var input = document.getElementById("taskname");
+            input.addEventListener("keyup", function(event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                document.getElementById("add").click();
+            }
+            });
+            var count=0;            
+            add1++;
+            // c=add1;            
             function add() {
+                count++;                
+                icount++;
+                if(localStorage["com.swabhav.tasks"]!=null){
+                    maintask=JSON.parse(localStorage["com.swabhav.tasks"]);
+                }
                 var x = document.getElementById("taskname").value;
                 var node = document.createElement("li");
-                var textvalue = document.createTextNode(x);
+                node.id=icount;
+                var textvalue = document.createTextNode(x+" ");
+                var btn= document.createElement("input");
+                btn.type="button";
+                btn.onclick=del;
+                btn.value="x";
                 node.appendChild(textvalue);
+                node.appendChild(btn);
                 document.getElementById("tasks").appendChild(node);
-                
+                var currentdate = new Date(); 
+                var datetime =currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+                maindate = datetime;
+                var t={};                
+                t.id=icount;                
+                t.name=x;
+                t.time=maindate;
+                maintask.push(t);
+                localStorage["com.swabhav.tasks"]=JSON.stringify(maintask);                
+                // c++;
+                dashboard();
+            }
+            function del() {                
+                var element = document.getElementById(icount);
+                console.log(icount);                
+                document.getElementById("tasks").removeChild(element);
+                maintask.pop();
+                localStorage["com.swabhav.tasks"]=JSON.stringify(maintask);
+                icount--;
+                count--;
+                // c--;
+                dashboard();
+            }
+            function dashboard() { 
+                var currentdate = new Date(); 
+                var datetime =currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+                d = datetime;                                
+                document.getElementById("time").innerHTML = d;
+                document.getElementById("taskcount").innerHTML=icount;                               
             }
         </script>
     </body>

@@ -1,0 +1,49 @@
+<html>
+<body>
+    
+</body>
+<script>
+    //1
+    var nos=[10,20,30];
+    console.log(nos);
+    
+    var length=nos.length;
+    length;
+    nos[length]=40;
+    nos.push(50);
+    console.log(nos);
+
+    nos[1]=60;
+    console.log(nos);
+
+    nos.pop();
+    console.log(nos);
+
+    //2
+    var student={};
+    student.id=101;
+    student.name='deval';
+    console.log(student);
+
+    var emp1={name:'abc',location:'mumbai'};
+    console.log(emp1);
+
+    var emp2={name:'def',location:'pune'};
+    var emp3={name:'ghi',location:'goa'};
+    var company=[emp1,emp2,emp3];
+    console.log(company);
+
+    var emp4={name:'jkl',location:'delhi'};
+    company.push(emp4);//always have to do like this??
+    console.log(company);
+    
+    company[0].name='xyz';
+    console.log(company);
+    for(var i=0;i<company.length;i++)
+    document.write(company[i].name+" "+company[i].location+"\n");
+
+    company.splice(1,1);
+    company.pop();
+    console.log(company);
+</script>
+</html>

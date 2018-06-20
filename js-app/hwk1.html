@@ -1,0 +1,22 @@
+<html>
+<body>
+<b id="hoisting"></b><br>
+<b id="iffe"></b><br>
+<b id="iffeoutside"></b>
+<script>
+x = 5;
+elem = document.getElementById("hoisting");
+elem.innerHTML = x;                    
+var x; 
+
+(function() {
+    var y=7;
+    document.getElementById("iffe").innerHTML="INSIDE AN IFFE; y= "+y;
+}());
+
+document.getElementById("iffeoutside").innerHTML="OUTSIDE AN IFFE; y= "+y;
+
+var y;
+</script>
+</body>
+</html>
