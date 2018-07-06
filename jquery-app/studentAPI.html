@@ -1,0 +1,376 @@
+<html>
+<head>        
+    <style>
+        
+    input {
+        width:190px;
+    }
+    td{
+        padding:3px;
+    }
+    input[type=radio]{
+        width:2%;
+    }
+    
+    div{
+        border: solid 1px;
+        padding:5px;
+        width: 56%;
+    }
+    </style>
+    <script src="jquery-3.3.1.min.js"></script>
+    <script>
+        var api_url="http://gsmktg.azurewebsites.net:80/api/v1/techlabs/test/students/";
+        var buttoncreate=1;
+        var edit=0;
+        var changecolor;
+        var bgcol;
+        
+        $(document).ready(function(){      
+            $.ajax({
+                type: "GET",
+                url: api_url,
+                success: function(result) {
+                    load(result);
+                },
+                error: function(result) {
+                    alert('error');
+                }
+            });
+            $("#submit").click(function() { 
+                var tocall= validate();
+                if(tocall==0){
+                displayData();
+                } 
+                else{
+                    alert("form incomplete");
+                }
+            });  
+            $(document.body).on('click', '.deleterow' ,function(){
+                
+                var delete_button_id = $(this).attr('id');
+                var avoid="delete";
+                var id_to_remove= parseInt(delete_button_id.replace(avoid,''));
+                var rollno_to_remove=$("#"+id_to_remove).text();
+                var confirmation = confirm("Do you want to delete this row?");
+                if (confirmation == true) {
+                    $("#rollno").removeAttr("disabled");
+                    deleterow(rollno_to_remove);               
+                }                   
+            });
+            $(document.body).on('click', '.editrow' ,function(){
+                $("#"+changecolor).css("background-color", bgcol);
+                edit=1;
+                var edit_button_id = $(this).attr('id');
+                var avoid="edit";
+                var id_to_edit= parseInt(edit_button_id.replace(avoid,''));
+                changecolor=id_to_edit;                
+                var rollno_to_edit=$("#"+id_to_edit).text();
+                $("#rollno").attr("disabled", "disabled");
+                $("#"+id_to_edit).css("background-color", "lightgreen");
+                disp_data_in_form(rollno_to_edit);
+            });
+            $(document.body).on('click', '#saveButton' ,function(){
+                var rno = $("#rollno").val();
+                var age =  $("#age").val();
+                var name =  $("#name").val();
+                var date =  $("#date").val();
+                var gender = $("input[name='gender']:checked").val();
+                if(gender=="male"){
+                    gender=true;
+                }
+                else{
+                    gender=false;
+                }
+                var email =  $("#email").val();
+                var dataToedit;
+                dataToedit ={ "rollNo":rno,"name":name,"age":age,"email":email,"date":date,"isMale":gender};
+                sendEditdata(dataToedit,rno);    
+            });
+        });
+        function validate(){
+            var rno = $("#rollno").val();
+            var age =  $("#age").val();
+            var name =  $("#name").val();
+            var date =  $("#date").val();
+            console.log(date);
+            var gender = $("input[name='gender']:checked").val();
+            
+            var email =  $("#email").val();
+            var incomplete=0;
+
+            if(rno==null || rno==""){
+                $("#rnostar").css("color", "red");
+                $("#rnostar").text("*");
+                incomplete=1;
+            }
+            else{
+                $("#rnostar").text("");
+                incomplete=0;
+            }
+            if(age==null || age==""){
+                $("#agestar").css("color", "red");
+                $("#agestar").text("*");
+                incomplete=1;
+            }
+            else{
+                $("#agestar").text("");
+                incomplete=0;
+            }
+            if(name==null || name==""){
+                $("#namestar").css("color", "red");
+                $("#namestar").text("*");
+                incomplete=1;
+            }
+            else{
+                $("#namestar").text("");
+                incomplete=0;
+            }
+            if(date==null || date==""){
+                $("#date").val("2018-06-07");
+            }
+            else{
+                $("#datestar").text("");
+                incomplete=0;
+            }
+            if(email==null || email==""){
+                $("#emailstar").css("color", "red");
+                $("#emailstar").text("*");
+                incomplete=1;
+            }
+            else{
+                $("#emailstar").text("");
+                incomplete=0;
+            }
+            if(gender==null || gender==""){
+                $("#genderstar").css("color", "red");
+                $("#genderstar").text("*");
+                incomplete=1;
+            }
+            else{
+                $("#genderstar").text("");
+                incomplete=0;
+            }
+            if(incomplete==1){
+                return 1;
+            }
+            return 0;
+        }
+        function sendEditdata(dataToedit,rno){
+            $.ajax({
+                type: "PUT",
+                url: api_url+rno,
+                data:dataToedit,
+                success: function(result) {                        
+                    alert("SAVED CHANGES");
+                    refresh_table();
+                    $("#submit").show();
+                    $("#save").hide();
+                    $("#rollno").val("");
+                    $("#age").val("");
+                    $("#name").val("");
+                    $("#date").val("");
+                    $("#email").val("");
+                    document.getElementById("rangevalue").innerHTML="";
+                    $("#male").prop("checked", false);
+                    $("#female").prop("checked", false);
+                    $("#rollno").removeAttr("disabled");
+                    edit=0;
+                },
+                error: function(result) {
+                    alert('error');
+                }
+            });
+        }
+        function disp_data_in_form(rollno_to_edit){
+            $.ajax({
+                    type: "GET",
+                    url: api_url+rollno_to_edit,
+                    success: function(result) {
+                        disp_form(result);
+                    },
+                    error: function(result) {
+                        alert('error');
+                    }
+            });
+        }
+        function disp_form(result){
+            
+            $("#rollno").val(result.rollNo);
+            $("#age").val(result.age);
+            updateRangeValue();
+            $("#name").val(result.name);
+            $("#date").val(result.date);
+            $("#email").val(result.email);
+            if(result.isMale==true){
+                $("#male").prop("checked", true);
+                bgcol="lightblue";
+            }
+            else{
+                $("#female").prop("checked", true);
+                bgcol="pink";
+            }
+            $("input").change(function(){
+                if(edit==1){
+                    buttonChange();
+                }
+            });
+        }
+        function buttonChange(){
+            $("#submit").hide();
+            if(buttoncreate==1){
+                buttoncreate++;
+                $("#save").html("<button id='saveButton'>SAVE</button>");
+            }
+            else{
+                $("#save").show();
+            }
+        }
+        function deleterow(rollno_to_delete){
+            $.ajax({
+                type: "DELETE",
+                url: api_url+rollno_to_delete,
+                success: function(result) {
+                    alert("DELETED");
+                    refresh_table();
+                },
+                error: function(result) {
+                    alert('error');
+                }
+            });            
+        }
+        function refresh_table(){
+            $("#rollno").val("");
+            $("#age").val("");
+            $("#name").val("");
+            $("#date").val("");
+            $("#email").val("");
+            document.getElementById("rangevalue").innerHTML="";
+            $("#male").prop("checked", false);
+            $("#female").prop("checked", false);
+
+            $("#students").empty(); 
+            $.ajax({
+                    type: "GET",
+                    url: api_url,
+                    success: function(result) {
+                        load(result);
+                    },
+                    error: function(result) {
+                        alert('error');
+                    }
+            });
+        }
+        function displayData(){
+            var rno = $("#rollno").val();
+            var age =  $("#age").val();
+            var name =  $("#name").val();
+            var date =  $("#date").val();
+            var gender = $("input[name='gender']:checked").val();
+            if(gender=="male"){
+                gender=true;
+            }
+            else{
+                gender=false;
+            }            
+            var email =  $("#email").val();
+            var dataToAdd;
+            dataToAdd ={ "rollNo":rno,"name":name,"age":age,"email":email,"date":date,"isMale":gender};
+            sendData(dataToAdd);            
+        }
+        function sendData(dataToAdd){
+            $.ajax({
+                    type: "POST",
+                    url: api_url,
+                    data:dataToAdd,
+                    success: function(result) {
+                        alert("ADDED");
+                        refresh_table();
+                    },
+                    error: function(result) {
+                        alert('error');
+                    }
+            });
+        }
+        function load(result){
+            $("#img").html('<img src="loading.gif" width="40px" height="40px">');
+            setTimeout(function(){
+                display(result);
+            },2000);
+        }
+        function display(result){
+            $("#img").html('');
+            $("#students").empty(); 
+            var length=result.length;
+            
+            for(var i=0;i<length;i++){
+                var g;
+            if(result[i].isMale==true)
+                g="male";
+            else
+                g="female";
+                if(g=="male")
+                {
+                    $("#students").append("<tr>");
+                    $("#students").append("<td bgcolor='lightblue' id="+i+">"+result[i].rollNo+"</td>");
+                    $("#students").append("<td bgcolor='lightblue'>"+result[i].name+"</td>");
+                    $("#students").append("<td bgcolor='lightblue'>"+result[i].age+"</td>");
+                    $("#students").append("<td bgcolor='lightblue'>"+result[i].email+"</td>");
+                    $("#students").append("<td bgcolor='lightblue'>"+result[i].date+"</td>");
+                    $("#students").append("<td bgcolor='lightblue'>"+g+"</td>");
+                    $("#students").append("<td bgcolor='lightblue'><center><button class='deleterow' id='"+i+"delete'>delete</button><button class='editrow' id='"+i+"edit'>edit</button></center></td>");
+                }
+                else{
+                    $("#students").append("<tr bgcolor='pink'>");
+                    $("#students").append("<td bgcolor='pink' id="+i+">"+result[i].rollNo+"</td>");
+                    $("#students").append("<td bgcolor='pink'>"+result[i].name+"</td>");
+                    $("#students").append("<td bgcolor='pink'>"+result[i].age+"</td>");
+                    $("#students").append("<td bgcolor='pink'>"+result[i].email+"</td>");
+                    $("#students").append("<td bgcolor='pink'>"+result[i].date+"</td>");
+                    $("#students").append("<td bgcolor='pink'>"+g+"</td>");
+                    $("#students").append("<td bgcolor='pink'><center><button class='deleterow' id='"+i+"delete'>delete</button><button class='editrow' id='"+i+"edit'>edit</button></center></td>");
+                }
+            }             
+        }
+        function updateRangeValue(){            
+            var age1 = document.getElementById("age").value;
+            document.getElementById("rangevalue").innerHTML =age1;
+        }
+    </script>
+</head>
+    <body>
+        <div>
+    
+        ROLL NO:<br><input type="text" id="rollno" ><b id="rnostar"></b><br>
+        NAME:<br><input type="text" id="name" ><b id="namestar"></b><br>
+        AGE:<b id="rangevalue"></b><br><input type="range" id="age" min="1" max="100" value="50" onchange="updateRangeValue()" ><b id="agestar"></b><br>
+        EMAIL ID:<br><input type="email" id="email" ><b id="emailstar"></b><br>
+        DATE: <br><input type="date" id="date" ><b id="datestar"></b><br>
+        GENDER:
+        <input type="radio" name="gender" id="male" value="male">MALE
+        <input type="radio" name="gender" id="female" value="female">FEMALE <b id="genderstar"></b>
+        <br><button id="submit">ADD</button>
+        <b id="save"></b>
+
+        <br>
+        </div>
+        <hr>    
+        <table id="mainstudents"  border="1|0">
+        <col width="100"><col width="150"><col width="80"><col width="150"><col width="100"><col width="80"><col width="130">
+        <thead>
+        <tr>
+            <th>ROLL NO.</th>
+            <th>NAME</th>
+            <th>AGE</th>
+            <th>EMAIL</th>
+            <th>DATE</th>
+            <th>ISMALE?</th>
+            <th>OPTIONS</th>
+        </tr>
+        </thead>
+        <tbody id="students"></tbody>
+        </table>    
+        <b id="img"></b>
+        
+    </body>
+</html>

@@ -1,0 +1,100 @@
+<html>
+    <head>
+        <style type="text/css">
+        button {
+            border-radius: 50%;
+            background-color: grey;
+            width: 10%;
+            height: 10%;
+        }
+        div{
+            width:50%;
+            height:auto;
+            border: solid 1px;
+        }
+        b{
+            text-align: right;
+        }
+        </style>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script>
+            var attempts=5;
+                var level=1;
+            $(document).ready(function(){
+                
+                var blue= Math.floor(Math.random()*(24-2+2)+2);
+            for(var i = 1; i <=25; i++) {
+                $('#mydiv').append('<button id='+i+' > </button>');
+                if(i%5==0){
+                    $('#mydiv').append('<br>');
+                }
+            }
+
+                
+                create(blue);
+            });
+            function create(blue){
+                
+                $("#attempts").text(attempts);
+                $("#level").text(level);
+                $("button").click(function(){
+                    attempts--;
+                    
+                    $("#attempts").text(attempts);
+                    var clicked_id = $(this).attr('id');                                        
+                    if(attempts==-1){
+                        $("#attempts").text(attempts);
+                        alert("you failed try again");
+                        location.reload();    
+                    
+                    }
+                    if(clicked_id==blue){
+                        level++;
+                        $("#"+clicked_id).css('background-color', 'blue');                        
+                        
+                        if(level==2)
+                        {
+                            setTimeout(function(){ 
+                                alert("you win");
+                                nextlevel();
+                                },1000);
+                            $("#level").text(level);
+                        }
+
+                        
+                        // setTimeout(nextlevel(), 3000);
+                    }
+                    else if(clicked_id<blue){
+                        
+                        $("#"+clicked_id).css('background-color', 'red');                        
+                    }
+                    else if(clicked_id>blue){
+                        
+                        $("#"+clicked_id).css('background-color', 'green');                        
+                    }                    
+                });
+            
+            }
+            function nextlevel(){
+                attempts=7;
+                $("#attempts").text(attempts);
+                var b= Math.floor(Math.random()*(50-2+2)+2);
+                $('button').css('background-color', 'grey');                        
+                for(var i = 26; i <=50; i++) {
+                $('#mydiv').append('<button id='+i+'> </button>');
+                if(i%5==0){
+                    $('#mydiv').append('<br>');
+                }
+                }   
+                create(b);
+            }
+        </script>
+    </head>
+    <body style="padding:10px;">
+        <div id="mydiv">
+        <b>Attempts: <b/><b id="attempts"></b><br>        
+        <b>Level: <b/><b id="level"></b>   <br>
+        
+        </div>
+    </body>
+</html>

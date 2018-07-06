@@ -1,0 +1,181 @@
+<html>
+<head>
+<script src="jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script>
+   var q1={
+        id:1,
+        txtval:"Sensex is related to",
+        op:[
+            " BSE"," NSE"," RBI"," SEBI","abc"
+        ],
+        ans:" NSE"
+    };
+    var q2={
+        id:2,
+        txtval:"Name of the Nokias mobile phone operating system",
+        op:[
+            " Android"," Windows"," Symbian"," JAVA"
+        ],
+        ans:" Symbian"
+    };
+    var q3={
+        id:3,
+        txtval:"Who among following ordered Jallian Wala Bagh Massacre ?",
+        op:[
+            " Lord Mountbatten"," John Simon",
+            " Reginald Dyer"," N.D MacEven"
+        ],
+        ans:" Reginald Dyer"
+    };
+    var q4={
+        id:4,
+        txtval:"MS Dhoni is the _______ captain of Indian Cricket Team",
+        op:[
+            " 44"," 23"," 31"," 34"," 345"
+        ],
+        ans:" 34"
+    };
+    var q5={
+        id:4,
+        txtval:"Which was the India’s first scheduled airline ?",
+        op:[
+            " Tata Airlines"," Air India",
+            " Air Birla"," Indian Airlines"
+        ],
+        ans:" Tata Airlines"
+    };
+    var questions=[q1,q2,q3,q4,q5];
+    var right=0;
+    var percent=0;
+    var wrong=0;
+    var selected=[];
+    var flag=0;
+    var count=0;
+    var check_count=0;
+    var total_ques=3;
+    $(document).ready(function(){
+        generate_ques_nos();
+        create();       
+        printQuestions();
+        $("button").click(function(){
+            validate();
+        });
+        
+    });
+    function chart1(){
+        var chart = new CanvasJS.Chart("chartContainer",
+	{
+		title:{
+			text: "RESULT"
+		},
+		legend: {
+			maxWidth: 350,
+			itemWidth: 120
+		},
+		data: [
+		{
+			type: "pie",
+			showInLegend: true,
+			legendText: "{indexLabel}",
+			dataPoints: [
+				
+				{ y: percent, indexLabel: "RIGHT"},
+				{ y: 100-percent, indexLabel: "WRONG"}
+			]
+		}
+		]
+	});
+	chart.render();
+    }
+    function validate(){
+        right=0;
+        var radioValue;
+        for(var i=0;i<total_ques;i++){
+            radioValue = $("input[name='op"+i+"']:checked").val();
+            console.log(radioValue);
+            console.log(questions[selected[i]].ans);
+            if(radioValue==questions[selected[i]].ans){
+                right++;
+            }
+        }
+        result();
+        chart1();
+    }
+    function check(clicked_id){
+        
+        var cut_clicked_id = clicked_id.substring(1, clicked_id.length);
+        if(cut_clicked_id==questions[selected[check_count]].ans){
+            right++;   
+            $("#"+clicked_id).css('background-color', 'green'); 
+        }
+        else{
+            $("#"+clicked_id).css('background-color', 'red'); 
+        }
+        check_count++;
+
+        if(check_count==3){
+            result();
+        }
+    }
+    function result(){
+        wrong=3-right;
+        percent=(right/3)*100;
+        $("#right").text("RIGHT: "+right);
+        $("#wrong").text("WRONG: "+wrong);
+        $("#percent").text("PERCENT: "+percent+"%");
+    }
+    function printQuestions(){
+        for(i=0;i<total_ques;i++){
+            $("#"+i).text(questions[selected[i]].txtval);
+            for(var j=0;j<questions[selected[i]].op.length;j++){
+                document.getElementById(i+'txt'+j).value=questions[selected[i]].op[j];
+                $("#"+i+j+"txtval").text(questions[selected[i]].op[j]);
+                
+            }
+        }
+
+    }
+    function generate_ques_nos(){
+        while(count<4){
+            flag=0;
+            var ques= Math.floor(Math.random()*(4-0+0)+0);
+            for(i=0;i<3;i++){
+                if(ques==selected[i]){
+                    flag=1;
+                }
+            }
+            if(flag==1){
+                flag=0;
+            }
+            else{
+                selected[count]=ques;
+                count++;
+            }
+        }
+
+       
+    }
+    function create(){
+        var q=$('#questions');
+        for(var i = 0; i <total_ques; i++) {
+            q.append('<br><br><p id='+i+' > </p>');
+            
+            for(var j=0;j<questions[selected[i]].op.length;j++){
+                q.append('<input type="radio" name="op'+i+'" id="'+i+'txt'+j+'" value="a" /><b id='+i+j+'txtval></b><br>');
+            }
+        }
+        q.append('<button id="submit">SUBMIT</button');
+        q.append('<br><br><p id="right" > </p>');
+        q.append('<p id="wrong" > </p>');
+        q.append('<p id="percent" > </p>');
+    }
+</script>
+</head>
+<body>
+    <div id="questions">
+
+    </div>
+    <div id="chartContainer" style="width: 100%; height: 300px"></div> 
+</body>
+</html>

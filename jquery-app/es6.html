@@ -1,0 +1,56 @@
+<html>
+    <script>
+        console.log("Arrow functions");
+        //normal
+        var logUpperCase = function() {
+        var _this = this
+        this.string = this.string.toUpperCase()
+        return function () {
+            return console.log(_this.string)
+        }
+        }
+        logUpperCase.call({ string: 'es6 rocks' })()
+        // using arrow functions
+        var logUpperCase1 = function() {
+            this.string = this.string.toUpperCase()
+            return () => console.log(this.string)
+        }
+        logUpperCase1.call({ string: 'es6 rocks' })()
+        
+
+        console.log("String interpolation and backtick notation");
+        //normal
+        var a = 5;
+        var b = 10;
+        console.log('Fifteen is ' + (a + b) + ' and\nnot ' + (2 * a + b) + '.');
+        //using string interpolation and backtick notation
+        var a = 5;
+        var b = 10;
+        console.log(`Fifteen is ${a + b} and
+        not ${2 * a + b}.`);
+
+
+        console.log(`spread`);
+        //normal
+        function myFunction(x, y, z) { console.log(`${x}${y}${z}`) }
+        var args = [0, 1, 2];
+        myFunction.apply(null, args);
+        //spread
+        function myFunction(x, y, z) { console.log(`${x}${y}${z}`) }
+        var args = [0, 1, 2];
+        myFunction(...args);
+
+        var dateFields = [1970, 0, 1];  // 1 Jan 1970
+        var d = new Date(...dateFields);
+        console.log(d);
+
+        var parts = ['shoulders', 'knees']; 
+        var lyrics = ['head', ...parts, 'and', 'toes'];
+        console.log(lyrics);
+
+        var arr1 = [0, 1, 2];
+        var arr2 = [3, 4, 5];
+        arr1 = [...arr1, ...arr2];
+        console.log(arr1);
+    </script>
+</html>
