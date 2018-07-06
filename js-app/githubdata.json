@@ -1,0 +1,19 @@
+{
+    "users": {
+        "deval": {
+            "repositories": {
+                "r1": "HTML",                
+                "r2": "javascript",
+                "r3": "python"
+            },
+            "no_of_commits":"3"
+        },
+        "monal": {
+            "repositories": {
+                "r1": "angularJS",                
+                "r2": "ajax"
+            },
+            "no_of_commits": "6"
+        }
+    }
+}

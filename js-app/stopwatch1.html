@@ -1,0 +1,87 @@
+<html>
+<body>
+<button onclick="ReStartFunction()">Start</button>
+<button onclick="StopFunction()">Stop</button>
+<button id="pause" onclick="PauseFunction()">pause</button>
+<br>
+<b id="timer3">0:</b>
+<b id="timer2">0:</b>
+<b id="timer1">0</b>
+<script>
+
+var pause=0;
+var count=0;
+
+// var counter=setInterval(timer1, 1000); 
+var stoped=0
+function timer1()
+{
+  if (count==59){
+    var counter=setInterval(timer2, 1000); 
+  }
+  if(count==59){count=0}
+  count=count+1;
+  document.getElementById("timer1").innerHTML=count; 
+}
+
+  function timer2(){
+  count1=0
+  count1=count1+1;
+  document.getElementById("timer2").innerHTML=count1+":"; 
+  }
+
+  
+function StopFunction()
+{
+  clearInterval(counter);
+  window.count=0;
+  window.pause=0;
+  document.getElementById("pause").innerHTML="Pause"
+  window.stoped=1
+  document.getElementById("timer1").innerHTML=count;
+}
+
+function ReStartFunction()
+{
+    var counter=setInterval(timer1, 1000); 
+  if (counter)
+  {
+    clearInterval(counter);
+    window.pause=0;
+    window.count=0;
+    window.stoped=0
+    window.counter=setInterval(timer1, 1000); 
+    count=count+1;
+    document.getElementById("pause").innerHTML="Pause"
+    document.getElementById("timer1").innerHTML=count; 
+  }
+}
+
+function PauseFunction()
+{
+  if (stoped==0)
+  { 
+    if (pause==0) 
+    {
+      clearInterval(counter);
+      document.getElementById("pause").innerHTML="Resume"
+      pause=1;
+      return;
+    }
+
+  if (pause==1) 
+    {
+      window.counter=setInterval(timer1, 1000); 
+      document.getElementById("timer1").innerHTML=count ; 
+      document.getElementById("pause").innerHTML="Pause"
+      pause=0;
+      return;
+    }
+  }
+  return;
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<html>
+    <head>
+            <script src="jquery-3.3.1.min.js"></script>
+            
+            <script>        
+                    var count=1;
+                    var search1=[];  
+                    
+                    $(document).ready(function(){
+                    $("button").click(function() {
+                        
+                    var no=document.getElementById("txt").value;
+              
+                    $.ajax({
+                        type: "GET",
+                        url: "http://numbersapi.com/"+no+"/math",
+                        success: function(result) {
+                            display(no,result);
+                            // $("#a").text(result);
+                        },
+                        error: function(result) {
+                            alert('error');
+                        }
+                    });
+                });      
+                   });
+                    
+                    
+                    function display(no,result1){
+                        var counter=1;
+                        var node = document.createElement("tr");
+                        var node1 = document.createElement("td");
+                        var node2 = document.createElement("td");
+                        var node3 = document.createElement("td");
+                        node1.id=counter++;
+                        var textvalue1 = document.createTextNode(no);
+                        node1.appendChild(textvalue1);
+                        // var textvalue2 = document.createTextNode(result1.responseText);
+                        var textvalue2 = document.createTextNode(result1);
+                        node2.appendChild(textvalue2);
+                        var currentdate = new Date(); 
+                        var time=currentdate.getHours()+":"+currentdate.getMinutes()+":"+currentdate.getSeconds();
+                        var textvalue3 = document.createTextNode(time);
+                        node3.appendChild(textvalue3);
+                        node.appendChild(node1);
+                        node.appendChild(node2);
+                        node.appendChild(node3);
+                        document.getElementById("num").appendChild(node);
+                    }    
+                    function sort(){        
+                        var tochange=document.getElementById("sortrow").value;
+                        if(tochange=="number"){        
+                            number();
+                        }
+                        else{            
+                            time();   
+                        }
+                    }
+                    function number(){
+                        var length = document.getElementById("num").rows.length;
+                        var i,j;
+                        for(i=1;i<=length-1;i++){
+                            for(j=1;j<=length-1-i;j++){
+                                var x = document.getElementById("num").rows[j].cells[0].innerHTML;
+                                var y = document.getElementById("num").rows[j+1].cells[0].innerHTML;
+                                x=parseInt(x);
+                                y=parseInt(y);  
+                                if(y<x){  
+                                    swap(j,j+1);
+                                }
+                            }            
+                        }
+                    }
+                    function time(){
+                        var length = document.getElementById("num").rows.length;
+                        var i,j;
+                        for(i=1;i<=length-1;i++){
+                            for(j=1;j<=length-1-i;j++){
+                                var x = document.getElementById("num").rows[j].cells[2].innerHTML;
+                                var y = document.getElementById("num").rows[j+1].cells[2].innerHTML;
+                                x = x.replace(/:/g,"");
+                                y = y.replace(/:/g,"");                           
+                                x=parseInt(x);
+                                y=parseInt(y);  
+                                if(y<x){      
+                                    swap(j,j+1);
+                                }
+                            }
+                        }
+                    }    
+                    function swap(j,jplus1){
+                        var table = document.getElementById("num");
+                        var row = table.insertRow(0);
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        var cell3 = row.insertCell(2);
+                
+                        cell1.innerHTML = document.getElementById("num").rows[j+1].cells[0].innerHTML;
+                        cell2.innerHTML = document.getElementById("num").rows[j+1].cells[1].innerHTML;
+                        cell3.innerHTML = document.getElementById("num").rows[j+1].cells[2].innerHTML;
+                
+                        document.getElementById("num").rows[j+1].cells[0].innerHTML = document.getElementById("num").rows[jplus1+1].cells[0].innerHTML;
+                        document.getElementById("num").rows[j+1].cells[1].innerHTML = document.getElementById("num").rows[jplus1+1].cells[1].innerHTML;
+                        document.getElementById("num").rows[j+1].cells[2].innerHTML = document.getElementById("num").rows[jplus1+1].cells[2].innerHTML;
+                
+                        document.getElementById("num").rows[jplus1+1].cells[0].innerHTML = document.getElementById("num").rows[0].cells[0].innerHTML;
+                        document.getElementById("num").rows[jplus1+1].cells[1].innerHTML = document.getElementById("num").rows[0].cells[1].innerHTML;
+                        document.getElementById("num").rows[jplus1+1].cells[2].innerHTML = document.getElementById("num").rows[0].cells[2].innerHTML;
+                
+                        document.getElementById("num").deleteRow(0);          
+                    }
+                    </script>
+    </head>
+<body style="padding: 10px">
+    <input placeholder="Search..." type="text" id="txt"> 
+    <!-- <input type="button" id="search" onclick="ajaxcall()" value="Search"> -->
+    <button id="search" value="Search">Search</button>
+    <br><br>
+    SORT BY:
+    <select onchange="sort()" name="sortrow" id="sortrow">
+        <option value="default"></option>
+        <option value="number">number</option>
+        <option value="time">time</option>
+    </select>
+    <br><br>    
+    <table id="num"  border="1|0">
+        <col width="80">
+        <col width="610">
+        <col width="80">
+        <thead>
+        <tr>
+            <th>NUMBER</th>
+            <th>FACT</th>
+            <th> TIME</th>
+        </tr>
+        </thead>
+    </table>    
+    <div id="a"></div>
+</body>
+</html>

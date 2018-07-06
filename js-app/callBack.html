@@ -1,0 +1,21 @@
+<html>
+<script>
+    function doProcessing(no,printResult){
+        console.log("started processing");
+        var result=Math.random()*no;
+        printResult(result);
+    }
+    function printResult(result){
+        console.log("printing "+result);
+    }
+    doProcessing(21,printResult);
+
+    function printHello(){
+        console.log("printing hello");
+    }
+    setTimeout(printHello,2000);
+    setTimeout(function(){
+        console.log("printing anonymous")
+    },3000);
+</script>
+</html>

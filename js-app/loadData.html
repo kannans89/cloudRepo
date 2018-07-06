@@ -1,0 +1,16 @@
+<html>
+<body>
+    <input type="button" value="load data" onclick="load()">
+    <p id="img"></p>
+    <p id="data"></p>
+    <script>
+        function load(){
+            document.getElementById("img").innerHTML='<img src="loading.gif" width="40px" height="40px">';
+            setTimeout(function(){
+                document.getElementById("img").innerHTML="";
+                document.getElementById("data").innerHTML="data loaded from server";
+            },3000);
+        }
+    </script>
+</body>
+</html>

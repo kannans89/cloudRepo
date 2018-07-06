@@ -1,0 +1,78 @@
+<html>
+    <body>
+        <input type="button" value="start" onclick="start()">
+        <input type="button" id="chnge" value="pause" onclick="pause()">
+        <input type="button" value="stop" onclick="stop()"><br>
+        <b id="hrs">0</b>:<b id="mins">0</b>:<b id="secs">0</b>
+    </body>   
+    <script>
+        change=1;
+        var counter1,counter2,counter3;
+        var secs=0;
+        var mins=1;
+        var hrs=1;
+        var ispaused= false;
+        function start(){
+            
+            
+            counter1=setInterval(function(){ 
+                if(secs==10){
+                    secs=0;
+                }                
+                
+                document.getElementById("secs").innerHTML= secs; secs=secs+1; }, 1000);
+                
+            if(secs=1){
+            counter2=setInterval(function(){ 
+                if(mins==10){
+                    mins=0;
+                }
+                
+                document.getElementById("mins").innerHTML= mins++; }, 10000);
+                
+            }
+
+            counter3=setInterval(function(){ 
+                if(hrs==10){
+                    hrs=0;
+                }
+                document.getElementById("hrs").innerHTML= hrs++; }, 100000);
+        }
+
+        function pause(){
+            var s,m,h;
+            if(change==1){//pause counter
+                document.getElementById("chnge").value="resume";
+                change++;
+                
+                s=secs;
+                m=mins;
+                h=hrs;
+        
+                clearInterval(counter1);
+                clearInterval(counter2);
+                clearInterval(counter3);
+                secs=s;
+                mins=m+1;
+                hrs=h;
+                console.log(secs);
+            }
+            else{                
+                document.getElementById("chnge").value="pause";
+                change--;
+                
+                start();
+            }
+        }
+
+        function stop(){
+            clearInterval(counter1);
+            clearInterval(counter2);
+            clearInterval(counter3);
+            secs=0;
+            mins=1;
+            hrs=0;            
+            
+        }
+    </script>
+</html>

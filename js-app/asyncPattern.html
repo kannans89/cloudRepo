@@ -1,0 +1,34 @@
+<html>
+<script>
+    var dataService=function(){
+        var obj={};
+        obj.getData=function(){
+            var r=Math.random()*10;
+            return r;
+        }
+        obj.getDataAsyn=function(printR){
+            setTimeout(function(){
+                var r =Math.random()*100;
+                if(r>5)
+                    printR(r);
+                else
+                    printR("ERROR");
+            },0);
+            function printR(data){
+                console.log("printR "+data);
+            }
+        }
+        
+        return obj;
+    }();
+
+    var r =dataService.getData();
+    console.log(r);
+
+    dataService.getDataAsyn(function(R){
+        console.log("result is "+r);
+    });
+
+    console.log("End of program");
+</script>
+</html>

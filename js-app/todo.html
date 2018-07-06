@@ -34,12 +34,22 @@
                 top: 0;
                 padding: 15px;
             }
+
+        ul li.checked {
+            text-decoration: line-through;
+        }
+
+        ul li.checked::before {
+            position: absolute;   
+       
+        }
+
         </style>
     </head>
     <body>
         <div class="split left">
             TASK: <input type="text" id="taskname">
-            <input type="button" id="add" value="Add" class="round" onclick="add()">
+            <input type="button" id="add" value="Add" class="round">
             <br>
             <ul id="tasks">
             </ul> 
@@ -50,71 +60,80 @@
             Last update: <b id="time"></b>
         </div>
         <script type="text/javascript">
+        (function() {
+            
             var maincount=0;
             var maintask=[];
-            var icount=0;
+            var task_id_count=0;
+            var no_of_tasks;
+            var time=document.getElementById("time");
+            var taskcount=document.getElementById("taskcount");
             if(localStorage["com.swabhav.tasks"]!=null){
-            start();
+                start();
             }
             function start(){                      
-            var task_value=localStorage["com.swabhav.tasks"];            
-            task_value=JSON.parse(task_value);
-            l=task_value.length;
-            icount=l;                        
-            scount= localStorage.getItem("count");    
-            if(l!=0 || l!=null)
-            {
-                var i;
-                for(i=0;i<l;i++)
-                {
-                    var x = task_value[i].name;
+                var task_value=localStorage["com.swabhav.tasks"];            
+                task_value=JSON.parse(task_value);
+                no_of_tasks=task_value.length;
+                task_id_count=no_of_tasks;                
+                if(no_of_tasks!=0 || no_of_tasks!=null){   
+                    initial_tasks(task_value,no_of_tasks);
+                    time.innerHTML = task_value[no_of_tasks-1].time;
+                    taskcount.innerHTML=no_of_tasks;
+                }                
+            }   
+            function initial_tasks(task_value,no_of_tasks){
+            var i;
+            for(i=0;i<no_of_tasks;i++){
+                    var task_name = task_value[i].name;
                     var node = document.createElement("li");
                     node.id=i+1;                    
-                    var textvalue = document.createTextNode(x+" ");
-                    var btn= document.createElement("input");
-                    btn.type="button";
-                    btn.onclick=del;
-                    btn.value="x";
+                    var textvalue = document.createTextNode(task_name+" ");
+                    var cancel_button= document.createElement("input");
+                    cancel_button.type="button";
+                    cancel_button.onclick=remove;
+                    cancel_button.value="x";
                     node.appendChild(textvalue);
-                    node.appendChild(btn);
+                    node.appendChild(cancel_button);
                     document.getElementById("tasks").appendChild(node);                            
                 }
             }
-            document.getElementById("time").innerHTML = task_value[l-1].time;
-            document.getElementById("taskcount").innerHTML=l;
-            }    
-            var scount=0;
-            // var c=0;
-            var add1=0;
-            var sdate= localStorage.getItem("date");
-            scount= localStorage.getItem("count");
-            add1=scount;                      
+            //EVENT LISTENERS
+            //add task
+            document.getElementById("add").addEventListener("click", function(){
+            add();
+            });
+            // for strikethrough
+            var list = document.querySelector('ul'); 
+            list.addEventListener('click', function(ev) {
+            if (ev.target.tagName === 'LI') {
+                ev.target.classList.toggle('checked');
+            }
+            }, false);
+            //enter key
             var input = document.getElementById("taskname");
             input.addEventListener("keyup", function(event) {
             event.preventDefault();
             if (event.keyCode === 13) {
                 document.getElementById("add").click();
             }
-            });
-            var count=0;            
-            add1++;
-            // c=add1;            
-            function add() {
-                count++;                
-                icount++;
+            });            
+
+            function add() {               
+                task_id_count++;
                 if(localStorage["com.swabhav.tasks"]!=null){
                     maintask=JSON.parse(localStorage["com.swabhav.tasks"]);
                 }
-                var x = document.getElementById("taskname").value;
+                var task_name = document.getElementById("taskname").value;
                 var node = document.createElement("li");
-                node.id=icount;
-                var textvalue = document.createTextNode(x+" ");
-                var btn= document.createElement("input");
-                btn.type="button";
-                btn.onclick=del;
-                btn.value="x";
+                node.id=task_id_count;
+                var textvalue = document.createTextNode(task_name+" ");
+                var cancel_button= document.createElement("input");
+                cancel_button.type="button";
+                cancel_button.onclick=remove;
+                cancel_button.value="x";
                 node.appendChild(textvalue);
-                node.appendChild(btn);
+                node.appendChild(cancel_button);
                 document.getElementById("tasks").appendChild(node);
                 var currentdate = new Date(); 
                 var datetime =currentdate.getDate() + "/"
@@ -124,24 +143,21 @@
                 + currentdate.getMinutes() + ":" 
                 + currentdate.getSeconds();
                 maindate = datetime;
-                var t={};                
-                t.id=icount;                
-                t.name=x;
-                t.time=maindate;
-                maintask.push(t);
+                var task1={};                
+                task1.id=task_id_count;                
+                task1.name=task_name;
+                task1.time=maindate;
+                maintask.push(task1);
                 localStorage["com.swabhav.tasks"]=JSON.stringify(maintask);                
-                // c++;
                 dashboard();
             }
-            function del() {                
-                var element = document.getElementById(icount);
-                console.log(icount);                
+            function remove() {                
+                var element = document.getElementById(task_id_count);
+                console.log(task_id_count);                
                 document.getElementById("tasks").removeChild(element);
                 maintask.pop();
                 localStorage["com.swabhav.tasks"]=JSON.stringify(maintask);
-                icount--;
-                count--;
-                // c--;
+                task_id_count--;                            
                 dashboard();
             }
             function dashboard() { 
@@ -152,10 +168,10 @@
                 + currentdate.getHours() + ":"  
                 + currentdate.getMinutes() + ":" 
                 + currentdate.getSeconds();
-                d = datetime;                                
-                document.getElementById("time").innerHTML = d;
-                document.getElementById("taskcount").innerHTML=icount;                               
+                time.innerHTML = datetime;
+                taskcount.innerHTML=task_id_count;                               
             }
+        }());
         </script>
     </body>
 </html>

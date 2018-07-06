@@ -1,0 +1,33 @@
+<html>
+<body onload="loadDoc()">
+
+<div id="demo">
+
+</div>
+
+<script>
+function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      parseJSON(this);
+      
+    }
+  };
+  xhttp.open("GET", "githubdata.txt", true);
+  xhttp.send();
+}
+function parseJSON(jsonobj){
+    var jsonobj = JSON.parse(jsonobj.responseText);
+    for(var key in jsonobj) {
+        var item = jsonobj[key];
+        console.log(item.name);
+        console.log(item.contents.repositories);
+        console.log(item.contents.no_of_commits);
+    }
+    
+}
+</script>
+
+</body>
+</html>
