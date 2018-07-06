@@ -1,0 +1,41 @@
+<html ng-app="calcModule">
+    <head>
+        <script src="angular.js"></script>
+        <script>
+            angular.module('calcModule',[])
+            .factory('calcService',['$log',function($log){
+                $log.info('inside calculator service');
+                var obj={};
+                
+                obj.calculateSimpleInterest=function(p,n,r){
+                    $log.info('inside simple interest function');
+                    if(n>0){
+                        var simpleInterest=(p*n*r)/100;
+                        return simpleInterest;
+                    }
+                    else{
+                        throw "n less than 0";
+                    }
+                }
+                return obj;
+            }])
+            .controller('mainController',['$scope','calcService',function($scope,calcService){
+                $scope.p;
+                $scope.n;
+                $scope.r;
+                $scope.calc=function(){ 
+                $scope.result=calcService.calculateSimpleInterest($scope.p,$scope.n,$scope.r);                
+                }
+            }]);
+        </script>
+    </head>
+    <body>
+        <section ng-controller="mainController">
+            principle: <br><input type="text" ng-model="p"><br>
+            number of months: <br><input type="text" ng-model="n"><br>
+            rate: <br><input type="text" ng-model="r"><br><br>
+            <button ng-click="calc()">Calculate</button><br><hr>
+            <b>INTEREST: {{result}}</b>
+        </section>
+    </body>
+</html>

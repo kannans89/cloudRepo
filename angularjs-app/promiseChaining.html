@@ -1,0 +1,67 @@
+<html>
+    <script>
+        var user=[{
+            id:101,  
+            name:'deval',
+            repositories:[4,6,4,2],
+            
+        },
+        {
+            id:102,  
+            name:'',
+            repositories:[3,6,4,2],
+        }];
+        function getUser(id){
+            var promise1= new Promise(function(resolve,reject) {     
+                for(i=0;i<user.length;i++){
+                if(user[i].id==id){
+                    resolve(user[i].name);
+                }
+                else{
+                    reject(id);
+                }
+                }       
+            });
+            return promise1;
+        }
+        function getRepositories(name){
+            var promise2= new Promise(function(resolve,reject) {            
+                for(i=0;i<user.length;i++){
+                if(user[i].name==name){
+                    resolve(user[i].repositories);
+                }
+                else{
+                    reject(name);
+                }
+                }
+            });
+            return promise2;
+        }
+        function getCommits(data){
+            var promise3= new Promise(function(resolve,reject) {           
+
+                if(true){
+                    resolve(data[0]);
+                }
+                else{
+                    reject(data[0]);
+                }
+                
+            });
+            return promise3;
+        }
+        function display(commits){
+            console.log("number of commits: "+commits);
+        }
+        function handleError(e){
+            console.log("error: "+e);
+        }
+        getUser(101)
+        .then(getRepositories,handleError)
+        .then(getCommits,handleError)
+        .then(display,handleError);
+    
+    console.log("End of script");
+    
+    </script>
+</html>

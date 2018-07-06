@@ -1,0 +1,27 @@
+<html ng-app="bindingModule">
+<head>
+    <script src="angular.js"></script>
+    <script>
+        angular.module('bindingModule',[])
+        .controller('bindingController',['$scope',function($scope){
+            $scope.student={
+                col :"",
+                bgcol:"",
+                size:"",
+            }
+            $scope.name="";
+        }]);
+    </script>
+</head>
+<body>    
+<section ng-controller="bindingController">  
+    <table style="padding:2px">
+        <tr><td>text:</td><td><input type="text" ng-model="name"></td></tr>
+        <tr><td>text color:</td><td><input type="text" ng-model="student.col"></td></tr>
+        <tr><td>background color:</td><td><input type="text" ng-model="student.bgcol"></td></tr>
+        <tr><td>font size:</td><td><input type="text" ng-model="student.size"></td></tr>            
+    </table>    
+    <p style="font-size:{{student.size}};color:{{student.col}};background-color:{{student.bgcol}}">{{name}}</p>
+</section>
+</body>
+</html>

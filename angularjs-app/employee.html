@@ -1,0 +1,74 @@
+<html ng-app="employeeModule">
+    <head>
+        <style>
+            
+            .a4 {
+                background-color:green;
+                color:white;
+            }
+            .a3 {
+                background-color:lightgreen;
+            }
+            .a2 {
+                background-color:yellowgreen;
+            }
+            .a1 {
+                background-color:yellow;
+            }
+        </style>
+
+        <script src="angular.js"></script>
+        <script>
+            angular.module('employeeModule',[])
+             .controller('employeeController',['$scope',function($scope){
+                var emp1={
+                    name:"deval",
+                    age:22,
+                    id:11,
+                    salary:52131,
+                    rating:4
+                };
+                var emp2={
+                    name:"rachel",
+                    age:20,
+                    id:12,
+                    salary:21211,
+                    rating:2
+                }
+                var emp3={
+                    name:"joey",
+                    age:21,
+                    id:13,
+                    salary:23131,
+                    rating:1
+                }
+                var emp4={
+                    name:"monica",
+                    age:28,
+                    id:14,
+                    salary:12131,
+                    rating:3,
+                };
+                var emp5={
+                    name:"ross",
+                    age:25,
+                    id:15,
+                    salary:23131,
+                    rating:4
+                };
+                $scope.employeeList=[emp1,emp2,emp3,emp4,emp5];
+            }]);
+        </script>
+    </head>
+    <body>
+        <section ng-controller="employeeController">
+            <table>
+                <tr><th>name</th><th>id</th><th>age</th><th>salary</th><th>rating</th></tr>
+                
+                <tr ng-repeat="emp in employeeList" class="a{{emp.rating}}"> <td>{{ emp.id }}</td> <td>{{ emp.name }} </td> <td>{{emp.age}}</td> <td>{{emp.salary}}</td> <td>{{emp.rating}}</td></tr>
+                
+            </table>
+            
+        </section>
+    </body>
+</html>

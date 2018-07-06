@@ -1,0 +1,29 @@
+<html ng-app="bindingModule">
+<head>
+    <script src="angular.js"></script>
+    <script>
+        angular.module('bindingModule',[])
+        .controller('bindingController',['$scope',function($scope){
+            $scope.student={
+                name:"deval",
+                rollno:1
+            }
+        }]);
+    </script>
+</head>
+<body>
+    <section ng-controller="bindingController">
+    one time:<br>
+    name:<b>{{ ::student.name }}</b><br>
+    roll no:<b>{{ ::student.rollno }}</b><br>
+    <hr>
+    one way:<br>
+    name:<b>{{ student.name }}</b><br>
+    roll no:<b>{{ student.rollno }}</b><br>
+    <hr>
+    two way<br>
+    name:<input type="text" ng-model="student.name"><br>
+    roll no:<input type="text" ng-model="student.rollno">
+</section>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<html>
+    <head>
+            <link rel="stylesheet" href="css/bootstrap.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="js/bootstrap.min.js"></script>
+        <script>
+          $(document).ready(function(){   
+            $.get('emp3.txt', function(data) {
+            var array = data.split("\n");
+            array=convert(array);
+            // create(array); 
+            heirarchy(array);
+            }, 'text');
+          });
+
+          function heirarchy(array){
+            var topElement;
+            var mgrId;
+            var acc=0;
+            var collapseId=0;
+            for( var i=0;i<array.length;i++){
+              for(var j=0;j<array[i].length;j++){               
+                if(array[i][j]=="'PRESIDENT'"){
+                  topElement=array[i][0];
+                  $("#president").text(array[i][j-1]);
+                }
+              }
+            }
+            for( var i=0;i<array.length;i++){
+              for(var j=0;j<array[i].length;j++){               
+                if(array[i][j]=="'MANAGER'"){
+                  mgrId=array[i][0];
+                  makeAccordion(array[i][1],acc++,mgrId,array,collapseId++);
+                }
+              }
+            }
+          }
+          function makeAccordion(mgrname,accId,mgrId,array,collapseId){
+            var c=$('#collapse1');            
+            c.append(`
+            <div class="panel-heading" style="background-color: lightgray">
+                          <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#${collapseId}collapse" >${mgrname}</a>
+                          </h4>
+                  </div>
+                    <div id="${collapseId}collapse" class="panel-collapse collapse">
+                          <ul class="list-group" id="${accId}undermanager">
+                                  
+                          </ul>   
+                  </div>
+            `);
+            addWorkers(mgrId,accId,array);
+          }
+          function addWorkers(mgrId,accId,array){
+            for(var i=0;i<array.length;i++){
+              if(array[i][3]==mgrId){
+                $('#'+accId+'undermanager').append(`<li class="list-group-item" id="0a">${array[i][1]}</li>`);
+              }
+            }
+          }
+          function convert(array){
+            for(var i=0;i<array.length;i++){
+              array[i]=array[i].split(',');
+            }
+            return array;            
+          }
+    </script>
+    </head>
+    <body>
+            
+      <div class="container">
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading" style="background-color: lightsteelblue" >
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse1" id="president">EMPLOYEE</a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+                  
+              </div>
+          </div>
+        </div>
+      </div>
+          
+    </body>
+</html>

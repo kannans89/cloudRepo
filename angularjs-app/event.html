@@ -1,0 +1,38 @@
+<html ng-app="eventModule">
+    <head>
+        <script src="angular.js"></script>
+        <script>
+            // angular.module('eventModule',[])
+            // .controller('clickEvent',['$scope','$timeout',function($scope,$timeout){         
+               
+            //     $scope.loadData = function(){
+            //         $scope.data={
+            //         name:"Deval",
+            //         id:60004158024,
+            //         college:"",
+            //         imge:"pi3.jpg"                    
+            //     }                  
+            //     $timeout(function () {                    
+            //         $scope.data.college = "DJ SANGHVI";
+            //     }, 1000);
+            //     }
+            // }]);
+
+            angular.module("eventModule",[]).controller("clickEvent",["$scope","$timeout",function(e,l){e.loadData=function(){e.data={name:"Deval",id:60004158024,college:"",imge:"pi3.jpg"},l(function(){e.data.college="DJ SANGHVI"},1e3)}}]);
+        </script>
+    </head>
+    <body>
+        <section ng-controller="clickEvent">
+        <button ng-click="loadData()">Load Data</button><br>
+        
+        <img ng-src="{{ data.imge }}" width="40%" height="30%"><br>
+        <b id="name">{{ data.name }}</b><br>
+        <b id="id"> {{ data.id }}</b><br>
+        
+    
+        <hr>
+        
+        <b id="college">{{ data.college }}</b>
+        </section>
+    </body>
+</html>

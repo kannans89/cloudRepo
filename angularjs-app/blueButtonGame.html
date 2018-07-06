@@ -1,0 +1,117 @@
+<html ng-app="blueballModule">
+    <head>
+        <style type="text/css">
+        button {
+            border-radius: 50%;
+            background-color: grey;
+            width: 10%;
+            height: 10%;
+        }
+        div{
+            width:50%;
+            height:auto;
+            border: solid 1px;
+        }
+        b{
+            text-align: right;
+        }
+        </style>
+        <script src="angular.js"></script>
+        <script>
+            
+
+            angular.module('blueballModule',[])
+            .controller('blueballController',['$scope','$rootScope','$timeout',function($scope,$rootScope,$timeout){
+                $rootScope.c=[];
+                for(var i=0;i<25;i++){
+                
+                    $rootScope.c[i]={
+                        "background-color" : "grey",
+                
+                 }
+                }
+                $scope.value1 = false;
+                $scope.value2 = false;
+                $scope.value3 = false;
+                var blue= Math.floor(Math.random()*(24-2+2)+2);
+                $scope.attempts=5;
+                $scope.level=1;
+                $scope.buttons=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25];
+                $scope.buttons1=[];
+                
+                $scope.check=function(clicked_id){
+                    $scope.attempts--;
+                    if($scope.attempts==-1){
+                        alert("you failed try again");
+                        location.reload();                        
+                    }
+                    if(clicked_id==blue){
+                        $scope.level++;
+                        for(var i=0;i<50;i++){
+                            if(clicked_id==i){
+                                $rootScope.c[i]={
+                                    "background-color" : "blue",
+                                }
+                            }
+                        }
+                        if($scope.level==2)
+                        {
+                            $timeout(function(){ 
+                                alert("you win");
+                                $scope.attempts=7;
+                                blue= Math.floor(Math.random()*(50-2+2)+2);    
+                                $scope.buttons=[];            
+                                for(var i = 0; i <50; i++) {
+                                    $scope.buttons[i]=i+1;
+                                    console.log($scope.buttons[i]);
+                                }
+                                for(var i=0;i<50;i++){                
+                                    $rootScope.c[i]={
+                                        "background-color" : "grey",            
+                                    }
+                                } 
+                            },1000);
+                        }                                                
+                    }
+                    else if(clicked_id<blue){                                               
+                        for(var i=0;i<50;i++){
+                            if(clicked_id==i){
+                                $rootScope.c[i]={
+                                    "background-color" : "red",
+                                }
+                            }
+                        }                        
+                    }
+                    else if(clicked_id>blue){                        
+                        for(var i=0;i<50;i++){
+                            if(clicked_id==i){
+                                $rootScope.c[i]={
+                                    "background-color" : "green",
+                                }
+                            }
+                        }                       
+                    }                  
+                }
+            }]);
+        </script>
+    </head>
+    <body style="padding:10px;" ng-controller="blueballController" >
+        <div>
+        <b>Attempts: <b/><b>{{attempts}}</b><br>        
+        <b>Level: <b/><b>{{level}}</b><br>
+        
+        </div>
+        <div style="text-align:left">
+            <b ng-repeat="i in buttons">               
+                <button id="{{i}}" ng-click="check(i)" ng-style="c[{{i}}]">{{i}}
+                </button>
+                <br ng-if="i%5=='0'">
+            </b>
+            <b ng-repeat="i in buttons1">               
+                    <button id="{{i}}" ng-click="check(i)" ng-style="c[{{i}}]">{{i}}
+                    </button>
+                    <br ng-if="i%5=='0'">
+            </b>
+        </div>
+    </body>
+</html>

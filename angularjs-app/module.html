@@ -1,0 +1,59 @@
+<html ng-app="swabhav.moduleA">
+    <head>
+        <script src="angular.js"></script>
+        <script>
+            angular.module('swabhav.moduleA',['swabhav.moduleB','swabhav.moduleC'])
+                .controller('customerController',
+                function($scope,$rootScope){
+                    console.log("customer controller created");
+                    $rootScope.company="Swabhav";
+                    $scope.customer={
+                        name:"deval",
+                        id:1,
+                        city:"mumbai"
+                    };
+                });
+            
+            angular.module('swabhav.moduleB',[])
+                .controller('addressController',
+                function($rootScope,$scope){
+                    console.log("address controller created");
+                    console.log($rootScope.company);
+                    $scope.address={
+                        street:"juhu galli",
+                        pin:400058,
+                        flatno:6
+                    }
+                });
+
+            angular.module('swabhav.moduleC',[])
+                .controller('ordersController',
+                function($rootScope,$scope){
+                    console.log("orders controller created");
+                    console.log($rootScope.company);
+                    $scope.orders={
+                        id:101,
+                        product:"colgate",
+                        price:24
+                    }
+                });
+        </script>
+    </head>
+    <body>
+        <section ng-controller="customerController">
+            {{ customer.name }}
+            {{ customer.id }}
+            {{ customer.city }}
+        </section>
+
+        <section ng-controller="addressController">
+                {{ address | json }}
+        </section>
+
+        <div ng-controller="ordersController">
+            {{ orders.id }}
+            {{ orders.product }}
+            {{ orders.price }}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,21 @@
+<html ng-app="">
+<head>
+    <script src="angular.js"></script>
+    <script>
+        
+    </script>
+</head>
+<body>
+    
+<section  ng-init="col='',bgcol='',size=''">
+    <table style="padding:2px">
+    <tr><td>text:</td><td><input type="text" ng-model="name"></td></tr>
+    <tr><td>text color:</td><td><input type="text" ng-model="col"></td></tr>
+    <tr><td>background color:</td><td><input type="text" ng-model="bgcol"></td></tr>
+    <tr><td>font size:</td><td><input type="text" ng-model="size"></td></tr>
+    
+    </table>
+    <p style="font-size:{{size}};color:{{col}};background-color:{{bgcol}}">{{name}}</p>
+</section>
+</body>
+</html>

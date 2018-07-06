@@ -1,0 +1,32 @@
+<html>
+<script src="angular.js"></script>
+<script>
+    var dataService=function(){
+        var obj={};
+        obj.getData = function(){
+           var promise= new Promise(function(resolve, reject) {            
+                var r=Math.random()*10;
+                if(r<5){
+                    reject(r);
+                }           
+                else{
+                    resolve(r);
+                }
+        });
+        return promise;
+        }
+        return obj;
+    }();
+    dataService.getData()
+     .then(handleThingsOnSuccess,handleThingsOnError)
+    
+    function handleThingsOnSuccess(r){
+        console.log(r);
+    }
+    function handleThingsOnError(e){
+           console.log("Error")
+           console.log(e);
+    }
+    console.log("End of program");
+</script>
+</html>
