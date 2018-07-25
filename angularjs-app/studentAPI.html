@@ -1,0 +1,79 @@
+<html ng-app="studentAPIModule">
+<head>        
+    <style>
+        
+    input {
+        width:190px;
+    }
+    td{
+        padding:3px;
+    }
+    input[type=radio]{
+        width:2%;
+    }
+    .blue{
+        background-color: lightblue;
+    }
+    .pink{
+        background-color: pink;
+    }
+    .green{
+        background-color: lightgreen;
+    }
+    div{
+        border: solid 1px;
+        padding:5px;
+        width: 56%;
+    }
+    </style>
+    <script src="angular.js"></script>
+    <script src="studentAPIController.js"></script>
+    <script src="service.js"></script>
+
+</head>
+    <body ng-controller="studentAPIController">
+        <div>
+    
+        ROLL NO:<br><input type="text" id="rollno" ng-model="formdata.rno"><b id="rnostar">{{star.rno}}</b><br>
+        NAME:<br><input type="text" id="name" ng-model="formdata.name"><b id="namestar">{{star.name}}</b><br>
+        AGE:<b id="rangevalue">{{formdata.age}}</b><br><input type="range" id="age" min="1" max="100" value="50" ng-model="formdata.age"><b id="agestar">{{star.age}}</b><br>
+        EMAIL ID:<br><input type="text" ng-model="formdata.email"><b id="emailstar">{{star.email}}</b><br>
+        DATE: <br><input type="date" ng-model="formdata.date"><b id="datestar">{{star.date}}</b><br>
+        GENDER:
+        <input type="radio" name="gender" ng-model="formdata.gender" ng-value="'male'">MALE
+        <input type="radio" name="gender" ng-model="formdata.gender" ng-value="'female'">FEMALE <b id="genderstar">{{star.gender}}</b>
+        <br><button id="submit" ng-click="add()" ng-hide="addhide">ADD</button>
+        <button ng-hide="savehide" ng-click="saveUpdate()">SAVE</button>
+
+        <br>
+        </div>
+        <hr>    
+        <table id="mainstudents"  border="1|0">
+        <col width="100"><col width="150"><col width="80"><col width="150"><col width="100"><col width="80"><col width="130">
+        <thead>
+        <tr>
+            <th>ROLL NO.</th>
+            <th>NAME</th>
+            <th>AGE</th>
+            <th>EMAIL</th>
+            <th>DATE</th>
+            <th>ISMALE?</th>
+            <th>OPTIONS</th>
+        </tr>
+        </thead>
+        
+            <tr ng-repeat="i in students track by $index"> 
+            <td ng-class="i.color">{{i.rollno}}</td>
+            <td ng-class="i.color">{{i.name}}</td>
+            <td ng-class="i.color">{{i.age}}</td>
+            <td ng-class="i.color">{{i.email}}</td>
+            <td ng-class="i.color">{{i.date}}</td>
+            <td ng-class="i.color">{{i.gender}}</td>
+            <td ng-class="i.color"><center><button class='deleterow' ng-click="delete(i.rollno)">delete</button><button class='editrow' ng-click="edit(i.rollno)">edit</button></center></td>
+            </tr>
+        
+        </table>    
+        <img ng-src="loading.gif" ng-hide="loadingimg" width="10%" height="10%"><br>
+        
+    </body>
+</html>

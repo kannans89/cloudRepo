@@ -1,0 +1,2 @@
+Hello,World! | appended data from writeFileAsync | | appended data from writeFileSync | | appended data from writeFileSync | | appended data from writeFileSync | for watch | appended data from writeFileSync || appended data from writeFileAsync | abc
+adsa

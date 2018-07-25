@@ -1,0 +1,15 @@
+{
+  "name": "readline-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ReadlineContactService.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "readline-sync": "^1.4.9"
+  }
+}

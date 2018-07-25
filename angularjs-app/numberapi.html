@@ -1,10 +1,9 @@
 <html ng-app="numapiModule">
     <head>
-            <script src="angular.js"></script>
-            <script>        
+        <script src="angular.js"></script>
+        <script>        
                     var count=1;
-                    var search1=[];  
-
+                    var search1=[];
                     angular.module('numapiModule',[])
                     .controller('numapiController',['$scope','$http',function($scope,$http){
                         $scope.no;
@@ -24,37 +23,15 @@
                                 $scope.time[factCount]=$scope.time1;
                                 factCount++;
                                 console.log(response.data);
-                            }
-                            
-                            
-                            );
+                            });
                             console.log("end of add");
                         }
-
-                        $scope.sort=function(){
-                            if($scope.srt=="number"){
-                                
-                                
-
-                            }
-                            else{
-                                alert("time");
-                            }
-                        }
                     }]);
-                    
-                    </script>
+        </script>
     </head>
 <body style="padding: 10px" ng-controller="numapiController">
     <input placeholder="Search..." type="text" id="txt" ng-model="no"> 
     <button id="search" value="Search" ng-click="add()">Search</button>
-    <!-- <br><br>
-    SORT BY:
-    <select ng-change="sort()" name="sortrow" ng-model="srt">
-        <option value="default"></option>
-        <option value="number">number</option>
-        <option value="time">time</option>
-    </select> -->
     <br><br>    
     <table id="num"  border="1|0">
         <col width="80">

@@ -1,0 +1,57 @@
+<html ng-app="numapiModule">
+    <head>
+        <script src="angular.js"></script>
+        <script>        
+                angular.module('numapiModule',[])
+                    .factory('numapiService',['$http',function($http){
+                        var obj={};                 
+                        obj.getNumberFact=function(no){
+                            return $http.get("http://numbersapi.com/"+no+"/math");                           
+                        }
+                        return obj;
+                    }])                    
+                    .controller('numapiController',['$scope','numapiService',function($scope,numapiService){
+                        $scope.fact=[];
+                        $scope.numberList=[];
+                        $scope.time=[];
+                        var factCount=0;
+                        $scope.search=function(){ 
+                            $scope.no;
+                            numapiService.getNumberFact($scope.no)
+                            .then(function(response) {
+                                var currentdate = new Date(); 
+                                $scope.time1=currentdate.getHours()+":"+currentdate.getMinutes()+":"+currentdate.getSeconds();
+                                $scope.numberList[factCount]=$scope.no;
+                                $scope.fact[factCount]=response.data;
+                                $scope.time[factCount]=$scope.time1;
+                                factCount++;
+                            });
+                        }
+                        console.log("end of script");
+                    }]);
+        </script>
+    </head>
+    <body style="padding: 10px" ng-controller="numapiController">
+        <input placeholder="Search..." type="text" id="txt" ng-model="no"> 
+        <button value="Search" ng-click="search()">Search</button>
+        <br><br>    
+        <table id="num"  border="1|0">
+            <col width="80">
+            <col width="610">
+            <col width="80">
+            <thead>
+                <tr>
+                    <th>NUMBER</th>
+                    <th>FACT</th>
+                    <th> TIME</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="i in fact">
+                <td>{{::no}}</td>
+                <td>{{i}}</td>
+                <td>{{::time1}}</td>
+            </tr>
+        </table>    
+        <div id="a"></div>
+    </body> 
+</html>

@@ -1,0 +1,18 @@
+<article>
+    <table border="solid 1px">
+        <thead>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>CONTACT NO.</th>
+            <th>OPTIONS</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="i in contacts">
+                <td>{{i.id}}</td>
+                <td>{{i.name}}</td>
+                <td>{{i.contact}}</td>
+                <td><a href="#/edit/{{i.id}}">Edit</a>   <a href="#/delete/{{i.id}}">Delete</a></td>
+            </tr>
+        </tbody>
+    </table>
+</article>

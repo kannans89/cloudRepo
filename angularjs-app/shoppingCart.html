@@ -1,0 +1,181 @@
+<html ng-app="shoppingCartModule">
+    <head>
+        <script src="angular.js"></script>
+        <script>        
+                    angular.module('shoppingCartModule',[])
+                    .factory('productService',['$log',function($log){
+                        var obj={};
+                        
+                        var productList=['iphone 6','samsung note 4']
+                        obj.returnProductNames=function(){
+                            return productList;
+                        }
+
+                        return obj;
+                    }])
+                    .factory('orderService',['$log',function($log){
+                        var obj={};
+                        var changeProductQty;
+                        var cart=[];
+                        var iprice=20000;
+                        var sprice=10000;
+                        var checkoutTotal;
+                        count=0;
+                        var new1=1;
+                        obj.addToCart=function(scopeName,scopeQty){
+                            for(var i=0;i<cart.length;i++){                                
+                                if(cart[i].name==scopeName){
+                                    new1=0;
+                                    changeProductQty=i;
+                                    break;
+                                }
+                                else{
+                                    new1=1;
+                                }
+                            }
+                            if(new1==0){
+                                updateOldProduct(changeProductQty,scopeQty,scopeName);
+                            }
+                            else{
+                                addNewProduct(scopeName,scopeQty);
+                            }
+                            new1=1;
+                        }
+
+                        obj.removeFromCart=function(i){
+                            if(parseInt(i)==1 && parseInt(cart.length)==2){
+                                cart[i].count= cart[i].count-1;
+                            }
+                            else{
+                                cart[i-1].count= cart[i-1].count-1;
+                            }
+                            cart.splice(i-1,1);
+                            count--;                            
+                            console.log(cart);
+                            checkoutTotal=0;
+                            for(var i=0;i<count;i++){
+                                checkoutTotal+=cart[i].total;
+                            } 
+                        }
+                        
+                        function addNewProduct(scopeName,scopeQty){
+                            count++;
+                            var item={};
+                            item.count=count;
+                            item.name=scopeName;
+                            item.qty=scopeQty;
+                            if(scopeName=="iphone 6")
+                                item.total=scopeQty*iprice;
+                            else
+                                item.total=scopeQty*sprice;
+                            cart[count-1]=item;
+                            checkoutTotal=0;
+                            for(var i=0;i<count;i++){
+                                checkoutTotal+=cart[i].total;
+                            }
+                        }
+                        
+                        function updateOldProduct(changeProductQty,scopeQty,scopeName){                            
+                           cart[changeProductQty].qty=parseInt(cart[changeProductQty].qty)+parseInt(scopeQty);
+                            if(scopeName=="iphone 6")
+                                cart[changeProductQty].total+=scopeQty*iprice;
+                            else
+                                cart[changeProductQty].total+=scopeQty*sprice;
+                            checkoutTotal=0;
+                            for(var i=0;i<count;i++){
+                                checkoutTotal+=cart[i].total;
+                            }
+                        }
+
+                        obj.getCart=function(){
+                            return cart;
+                        }
+                        obj.getCheckoutTotal=function(){
+                            return checkoutTotal;
+                        }
+                        return obj;
+                    }])
+                    .controller('shoppingCartController',['$scope','productService','orderService',function($scope,productService,orderService){
+                        $scope.name;
+                        $scope.qty;
+                        $scope.total;
+                        $scope.checkoutTotal=0;                        
+                        $scope.productNamesList=[];
+                        $scope.product=[];
+                        var qty;
+                        var iprice=20000;
+                        var sprice=10000;
+
+                        $scope.productNamesList=productService.returnProductNames();                
+                        $scope.add=function(){      
+
+                            orderService.addToCart($scope.name,$scope.qty);
+                            $scope.product=orderService.getCart();
+                            $scope.checkoutTotal=orderService.getCheckoutTotal();
+
+                        }
+                        $scope.delete=function(i){
+
+                            orderService.removeFromCart(i);
+                            $scope.product=orderService.getCart();
+                            $scope.checkoutTotal=orderService.getCheckoutTotal();
+
+                        }
+
+                        $scope.displayPriceOnQuantityChange=function(){
+                            qty=1;
+                            if($scope.qty!=null || $scope.qty!='')
+                                qty=$scope.qty;                                                        
+                            if($scope.name=="iphone 6")
+                                $scope.total=iprice*qty;
+                            else
+                                $scope.total=sprice*qty;
+                        }
+                        $scope.displayPriceOnProductChange=function(){
+                            $scope.qty=1;
+                            if($scope.name=="iphone 6")
+                                $scope.total=iprice;
+                            else
+                                $scope.total=sprice;
+                        }
+                        $scope.selectDisable=true;
+                                               
+                    }]);
+        </script>
+    </head>
+    <body style="padding: 10px" ng-controller="shoppingCartController">
+        Product: 
+        <select ng-model="name" ng-change="displayPriceOnProductChange()" ng-options="item for item in productNamesList">
+            <option value="" ng-disabled="selectDisable">-- Select a product --</option>
+        </select>&nbsp;&nbsp;&nbsp;
+        Quantity:<input type="text" ng-model="qty" ng-change="displayPriceOnQuantityChange()"> &nbsp;&nbsp;&nbsp;
+        Total Price: {{total}}
+        <button ng-click="add()">Add to Cart</button>
+        <br><br>    
+        <table id="num"  border="1|0">
+            <col width="30">
+            <col width="130">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <thead>
+            <tr>    
+                <th>#</th>
+                <th>PRODUCT</th>
+                <th>QUANTITY</th>
+                <th>TOTAL</th>
+                <th>OPTIONS</th>
+            </tr>
+            </thead>
+            <tr ng-repeat="i in product">
+                <td>{{i.count}}</td>
+                <td>{{i.name}}</td>
+                <td>{{i.qty}}</td>
+                <td>{{i.total}}</td>
+                <td><center><button ng-click="delete(i.count)">X</button></center></td>
+            </tr>
+        </table>    
+        <hr>
+        <p>Check Out price: <b>{{checkoutTotal}}</b></p>
+    </body>
+</html>
