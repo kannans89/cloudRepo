@@ -27,7 +27,6 @@ var contactService=function(){
 
     obj.save=function(){
         var json=JSON.stringify(contact);
-        // console.log(json);
         fs.writeFileSync('./contacts.json', json,function(err){
             console.log("contact saved");
         });
