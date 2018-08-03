@@ -1,0 +1,207 @@
+<html ng-app="contactModule">
+    <head>
+        <script src="angular.js"></script>
+        <script>        
+                    var idToEdit;
+                    var url="http://localhost:5555/api/v1/contacts/";
+                    angular.module('contactModule',[])
+                    .controller('contactController',['$scope','$http',function($scope,$http){
+                        $scope.authentication={
+                            username:"",
+                            password:"",
+                        };
+                        $scope.phoneToDelete;
+                        $scope.functionToCall;
+                        $scope.isloggedin=false;
+                        $scope.loginhide=true;
+                        $scope.formhide=false;                        
+                        $scope.savehide=true;
+                        $scope.addhide=false;
+                        $scope.form={
+                            name:"",
+                            email:"",
+                            phone:""
+                        }
+                        $scope.star={
+                            name:" ",
+                            email:" ",
+                            phone:" "
+                        }
+                        $scope.contact=[];
+                        $scope.init=function(){
+                            
+                            $http.get(url)
+                            .success(function(response) {
+                                $scope.contact=response;
+                            });
+                        }();
+                        function load(){
+                            
+                            $http.get(url)
+                            .success(function(response) {
+                                $scope.contact=response;
+                            });
+                        }
+                        $scope.add=function(){
+                                $scope.functionToCall="add";
+                                var id=$scope.contact.length;
+                                if(validate()){
+                                    $scope.loginhide=false;
+                                    $scope.formhide=true; 
+                                    if($scope.isloggedin==true){
+                                        var newContact={"name":$scope.form.name,"email":$scope.form.email,phone:$scope.form.phone};
+                                        $http.post(url, newContact);
+                                        alert("Data added");
+                                        $scope.loginhide=true;
+                                        $scope.formhide=false; 
+                                        setTimeout(function(){
+                                            load();
+                                        },100);
+                                        refreshForm();
+                                    }
+                                }
+                        }
+                        $scope.delete=function(phone){
+                            $scope.phoneToDelete=phone;
+                            $scope.functionToCall="delete";
+                            $scope.loginhide=false;
+                            $scope.formhide=true; 
+                            if($scope.isloggedin==true){
+                            $http.delete(url+phone);
+                            alert("Data Deleted");
+                            setTimeout(function(){
+                                load();
+                            },100);
+                            refreshForm();
+                            }
+                        }
+                        $scope.edit=function(phone){
+                            console.log("EDIT: "+phone);
+                            phoneToEdit=phone;
+                            $http.get(url+phone)
+                            .success(function(response) {
+                                $scope.form.name=response[0].name;
+                                $scope.form.email=response[0].email;
+                                $scope.form.phone=response[0].phone;
+                            });
+                            $scope.savehide=false;
+                            $scope.addhide=true;
+                        }
+                        $scope.update=function(){
+                            $scope.functionToCall="update";
+                            $scope.loginhide=false;
+                            $scope.formhide=true; 
+                            if($scope.isloggedin==true){
+                            var updateContact={"name":$scope.form.name,"email":$scope.form.email,phone:$scope.form.phone};
+                            $http.put(url+phoneToEdit,updateContact)
+                            alert("Data Updated");
+                            $scope.savehide=true;
+                            $scope.addhide=false;
+                            setTimeout(function(){
+                                load();
+                            },100);
+                            refreshForm();
+                            }
+                            
+                        }
+                        $scope.authenticate=function(){
+                            var details={"username":$scope.authentication.username,"password":$scope.authentication.password};
+                            $http.post("http://localhost:5555/api/authenticate",details)
+                            .success(function(response) {
+                                $scope.isloggedin=response;
+                                if(response==false){
+                                    alert("Incorrect username or password");
+                                }
+                                if($scope.functionToCall=="add")
+                                    $scope.add();
+                                else if($scope.functionToCall=="delete")
+                                    $scope.delete($scope.phoneToDelete);
+                                else if($scope.functionToCall=="update")
+                                    $scope.update();
+                            });
+                        }
+                        
+                        function validate(){
+                            var flag=0;
+                            if($scope.form.name=="" || $scope.form.name== null){
+                                $scope.star.name="*";
+                                flag=1;
+                            }
+                            else{
+                                $scope.star.name=" ";
+                                flag=0;
+                            }
+                            if($scope.form.email=="" || $scope.form.email== null){
+                                $scope.star.email="*";
+                                flag=1;
+                            }
+                            else{
+                                $scope.star.email=" ";
+                                flag=0;
+                            }
+                            if($scope.form.phone=="" || $scope.form.phone== null){
+                                $scope.star.phone="*";
+                                flag=1;
+                            }
+                            else{
+                                $scope.star.phone=" ";
+                                flag=0;
+                            }
+                            if(flag==0)
+                                return true;
+                            else{
+                                alert("Fill all the details");
+                                return false;
+                            }
+                        }
+                        function refreshForm(){
+                            $scope.loginhide=true;
+                            $scope.formhide=false; 
+                            $scope.isloggedin=false;
+                            $scope.authentication.username="";
+                            $scope.authentication.password="";
+                            $scope.form.name="";
+                            $scope.form.email="";
+                            $scope.form.phone="";
+                        }
+                    }]);
+        </script>
+    </head>
+<body style="padding: 10px" ng-controller="contactController">
+    <b ng-hide="formhide">
+    <input type="text" placeholder="Name..." ng-model="form.name"><b> {{star.name}}</b><br><br>
+    <input type="text" placeholder="Email..." ng-model="form.email"><b> {{star.email}}</b><br><br>
+    <input type="text" placeholder="Phone..." ng-model="form.phone"><b> {{star.phone}}</b><br><br>
+    <button ng-click="add()" ng-hide="addhide">Add</button>    
+    <button ng-click="update()" ng-hide="savehide">Save</button>
+    <hr>
+    <br>
+    <table id="num"  border="1|0">
+        <col width="80">
+        <col width="410">
+        <col width="80">
+        <col width="120">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Options</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="i in contact">
+            <td>{{i.name}}</td>
+            <td>{{i.email}}</td>
+            <td>{{i.phone}}</td>
+            <td><center><button class='deleterow' ng-click="delete(i.phone)">delete</button><button class='editrow' ng-click="edit(i.phone)">edit</button></center></td>
+        </tr>
+    </table>    
+    </b>
+    <b ng-hide="loginhide">
+        username: <input type="text" ng-model="authentication.username"><br><br>
+        password: <input type="password" ng-model="authentication.password"><br><br>
+        <button ng-click="authenticate()">Login</button>    
+    </b>
+    
+</body>
+</html>

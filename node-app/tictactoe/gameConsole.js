@@ -10,14 +10,22 @@ function gameConsole(){
 		var count=0;
 		var no;
 		var p1name,p2name;
+		p1name = readlineSync.question("P1 enter your name");
+		p2name = readlineSync.question("P2 enter your name");
+		
 		var board=boardObj();
+		board.createBoard();
 		var player=[];
 		player[0]=playerObj();
-        player[1]=playerObj();
-        var analyzer=resultAnalyzerObj();
+		player[1]=playerObj();
+		player[0].createPlayer(1,p1name);
+		player[1].createPlayer(2,p2name);
+		var analyzer=resultAnalyzerObj();
+		analyzer.createResultAnalyzer(board);
 		var game=gameObj();
+		game.createGame(player,analyzer,board);
 		while(analyzer.result=="INPROGRESS"){
-            no = readlineSync.question((player[(count%2)].name)+"Enter your choice");
+            no = readlineSync.question((player[(count%2)].name)+": enter your choice");
 			count++;
 			if(no>9){
 				count--;
@@ -30,7 +38,7 @@ function gameConsole(){
 			else{
 				game.play(no);
 			}
-			print(board);
+			obj.print(board);
 			analyzer.checkResult();
 			var res=analyzer.getResult();
 			if(res=="INPROGRESS"){
@@ -45,7 +53,7 @@ function gameConsole(){
 			console.log();
 		}
 	}
-	function print(board){
+	obj.print=function(board){
 		for(var i=0;i<9;i++){
 			var cellValue=board.cells[i].getValue();
 			var printValue=" ";
@@ -55,13 +63,13 @@ function gameConsole(){
 			else if(cellValue=="0"){
 				printValue="0";
 			}
-			System.out.print("|"+printValue);
+			process.stdout.write("|"+printValue);
 			if(i==2||i==5||i==8){
-				console.log("|");
+				process.stdout.write("|");
 				console.log();
 			}
 		}
 	}
-
     return obj;
 }
+module.exports=gameConsole;

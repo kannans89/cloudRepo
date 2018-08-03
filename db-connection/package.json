@@ -1,0 +1,16 @@
+{
+  "name": "mssql-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dbTest.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "edge": "^7.10.1",
+    "mssql": "^4.1.0",
+    "mysql": "^2.16.0"
+  }
+}

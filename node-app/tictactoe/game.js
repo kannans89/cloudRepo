@@ -15,10 +15,10 @@ function game(){
 	obj.play=function(cellno){
 			currentPlayer++;
 			if(currentPlayer%2==0){
-				obj.board.cellSet(cellno,players[1].mark);
+				obj.board.cellSet(cellno,obj.players[1].mark);
 			}
 			else{
-				obj.board.cellSet(cellno,players[0].mark);
+				obj.board.cellSet(cellno,obj.players[0].mark);
 			}
 	}
 

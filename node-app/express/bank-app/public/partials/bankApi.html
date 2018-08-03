@@ -1,0 +1,29 @@
+<html ng-app="bankModule">
+    <head>
+        <script src="angular.js"></script>
+        <script>        
+                    var url="http://localhost:5556/api/bank";
+                    angular.module('bankModule',[])
+                    .controller('bankController',['$scope','$http',function($scope,$http){
+                        $scope.registerMaster={
+                            username:"",
+                            password:"",
+                            retype:"",
+                            amount:""
+                        }
+                        $scope.register=function(){
+                            var newMaster={"name":$scope.registerMaster.username,"balance":$scope.registerMaster.amount,"password":$scope.registerMaster.password};
+                            $http.post(url, newMaster);
+                        }
+                    }]);
+        </script>
+    </head>
+<body style="padding: 10px" ng-controller="bankController">
+    username: <input type="text" ng-model="registerMaster.username"><br><br>
+    password: <input type="text" ng-model="registerMaster.password"><br><br>
+    retype-password: <input type="text" ng-model="registerMaster.retype"><br><br>
+    amount: <input type="text" ng-model="registerMaster.amount"><br><br>
+    <button ng-click="register()">Register</button>
+    
+</body>
+</html>

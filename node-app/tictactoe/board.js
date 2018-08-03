@@ -1,11 +1,11 @@
 var cellService=require('./cell');
-let cell=cellService();
+// let cell=cellService();
 function board(){
         var obj={};
         obj.cells=[];
         obj.createBoard=function(){
         for(var i=0;i<9;i++){
-            obj.cells[i]=cell();
+            obj.cells[i]=cellService();
         }
     }
 

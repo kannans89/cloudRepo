@@ -27,7 +27,7 @@ angular.module('contact-spa-app')
     $scope.id;
     $scope.name;
     $scope.contactno;
-
+    
     $scope.addContact=function(){
         // alert("hi");
         var newContact={

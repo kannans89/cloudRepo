@@ -1,0 +1,16 @@
+<article>
+    
+    <table border="solid 1px">
+        <tr>
+            <th>ID</th><th>DATE</th><th>AMOUNT</th><th>TYPE</th><th>NAME</th>
+        </tr>
+        <tr ng-repeat="i in passbook"> 
+            <td>{{i.id}}</td>
+            <td>{{i.transaction_date}}</td>
+            <td>{{i.amount}}</td>
+            <td>{{i.type}}</td>
+            <td>{{i.name}}</td>
+        </tr>
+    </table>
+    
+</article>

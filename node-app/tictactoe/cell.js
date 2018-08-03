@@ -1,20 +1,21 @@
 function cell(){
     var obj={};
 
-    var cellValue="";
+    obj.cellValue="";
 
 	obj.getValue=function() {
-		if(this.cellValue==""){
-			return null;
+		if(obj.cellValue==""){
+			return "";
 		}
-		return cellValue;
+		return obj.cellValue;
 	}
 
 	obj.setValue=function(mark) {
-		if(cellValue=="")
-		    cellValue=mark;
+		if(obj.cellValue=="")
+		    obj.cellValue=mark;
 		else
-            console.log("Cell already marked");
+			console.log("Cell already marked");
+			
 	}
 
     return obj;
