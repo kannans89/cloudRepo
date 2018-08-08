@@ -1,0 +1,37 @@
+<html  ng-app="tp">
+    <head>
+        <script src="./public/angular.js"></script>
+        <script>
+        var mysql=require("mysql");
+        var app=angular.module('tp',[])
+        .controller('tp1',['$scope','$http','$rootScope','$timeout',function($scope,$http,$rootScope,$timeout){
+            var studentObj;
+        var con = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "root",
+            database: "swabhav"
+        });
+        con.connect(function (err) {
+
+            if (err) throw err;
+            console.log("select Connected!");
+            con.query("select * from tp", function (err, result) {
+                if (err)
+                    throw err;
+                passbook = JSON.parse(JSON.stringify(result));
+                console.log(passbook);
+            });
+        });
+    
+
+        }])
+        </script>
+    </head>
+    <body>
+        <article ng-controller="tp1">
+            <img ng-src="t">
+        </article>
+
+    </body>
+</html>
