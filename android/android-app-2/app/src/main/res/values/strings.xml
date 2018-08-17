@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Name matcher</string>
+    <string name="firstname">First Name</string>
+    <string name="secondname">Second Name</string>
+</resources>

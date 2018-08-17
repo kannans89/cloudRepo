@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">%CALC</string>
+    <string name="one">  What is</string>
+    <string name="two"> % of</string>
+    <string name="three"> : </string>
+    <string name="four">is what percent of</string>
+    <string name="five">Percentage increase/decrease from\n</string>
+    <string name="six">to</string>
+</resources>

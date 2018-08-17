@@ -126,6 +126,7 @@ angular.module('ecommerce-spa-app')
     $scope.pay=function(){
         $http.post(url4,$scope.lineitems);
         alert("Checkout complete");
+        $rootScope.count=0;
     }
     
 }])

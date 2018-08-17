@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Multi Activity</string>
+    <string name="activity2">Second Activity</string>
+    <string name="radio_male">Male</string>
+    <string name="radio_female">Female</string>
+    <string name="radio_na">Not Applicable</string>
+</resources>
